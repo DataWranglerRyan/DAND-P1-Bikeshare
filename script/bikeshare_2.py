@@ -1,6 +1,9 @@
-from models.city import City
+from models.user_prompter import UserPrompter
 print("hello world")
+prompt = UserPrompter()
 
-city = City('washington')
-city.filter(month='All', day='0 6')
-print(city.filtered_df)
+city = prompt.get_city()
+prompt.filter_month_and_day()
+city.show_popular_travel_times()
+
+# print(city.filtered_df)
