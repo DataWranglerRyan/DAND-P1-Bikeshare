@@ -1,4 +1,6 @@
 import pandas as pd
+import calendar
+from datetime import datetime
 from pathlib import Path
 
 
@@ -29,6 +31,7 @@ class City(object):
         df['Start Hour'] = df['Start Time'].dt.hour
         df['End Hour'] = df['End Time'].dt.hour
         df['Start Month'] = df['Start Time'].dt.month
+        df['Trip'] = df['Start Station'] + ' to ' + df['End Station']
         return df
 
     def __parse_filter_input(self, input_string, start_range=0, end_range=6):
@@ -71,6 +74,15 @@ class City(object):
         return self.filtered_df['Start Hour'].value_counts().idxmax()
 
     def show_popular_travel_times(self):
-        print("The most common travel month is: {}".format(self.most_common_month()))
-        print("The most common travel day is: {}".format(self.most_common_day()))
-        print("The most common travel hour is: {}".format(self.most_common_hour()))
+        print("The most common travel month is: {}".format(calendar.month_name[self.most_common_month()]))
+        print("The most common travel day is: {}".format(calendar.day_name[self.most_common_day()]))
+        print("The most common travel hour is: {}".format(datetime.strptime(str(self.most_common_hour()), "%H").strftime('%I:%M %p')))
+
+    def show_popular_stations(self):
+        print("The most common start station is: {}".format(self.filtered_df['Start Station'].value_counts().idxmax()))
+        print("The most common end station is: {}".format(self.filtered_df['End Station'].value_counts().idxmax()))
+        print("The most common trip is: {}".format(self.filtered_df['Trip'].value_counts().idxmax()))
+
+    def show_trip_duration_stats(self):
+        print("The sum of all trip durations is: {0:0.2f} days".format(self.filtered_df['Trip Duration'].sum()/60/60/24))
+        print("The average trip duration is: {0:0.2f} minutes".format(self.filtered_df['Trip Duration'].mean()/60))
