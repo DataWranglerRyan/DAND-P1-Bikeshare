@@ -111,3 +111,9 @@ class City(object):
         print(self.get_gender_counts())
         print(self.get_birth_year_stats())
 
+    def show_all_stats(self):
+        self.show_popular_travel_times()
+        self.show_popular_stations()
+        self.show_trip_duration_stats()
+        self.show_user__stats()
+
