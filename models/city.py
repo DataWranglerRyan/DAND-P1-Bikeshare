@@ -73,6 +73,25 @@ class City(object):
     def most_common_hour(self):
         return self.filtered_df['Start Hour'].value_counts().idxmax()
 
+    def get_user_type_counts(self):
+        return self.filtered_df['User Type'].value_counts().to_frame("User Type Counts")
+
+    def get_gender_counts(self):
+        try:
+            return self.filtered_df.fillna("Unknown")['Gender'].value_counts().to_frame("Gender Counts")
+        except KeyError:
+            return "{} does not have gender data.".format(self.name.title())
+
+    def get_birth_year_stats(self):
+        try:
+            earliest = int(self.filtered_df['Birth Year'].min())
+            latest = int(self.filtered_df['Birth Year'].max())
+            common = int(self.filtered_df['Birth Year'].value_counts().idxmax())
+            return "The earliest birth year is {}.\nThe latest birth year is {}.\nThe most common birth year is {}."\
+                .format(earliest, latest, common)
+        except KeyError:
+            return "{} does not have birth year data.".format(self.name.title())
+
     def show_popular_travel_times(self):
         print("The most common travel month is: {}".format(calendar.month_name[self.most_common_month()]))
         print("The most common travel day is: {}".format(calendar.day_name[self.most_common_day()]))
@@ -86,3 +105,9 @@ class City(object):
     def show_trip_duration_stats(self):
         print("The sum of all trip durations is: {0:0.2f} days".format(self.filtered_df['Trip Duration'].sum()/60/60/24))
         print("The average trip duration is: {0:0.2f} minutes".format(self.filtered_df['Trip Duration'].mean()/60))
+
+    def show_user__stats(self):
+        print(self.get_user_type_counts())
+        print(self.get_gender_counts())
+        print(self.get_birth_year_stats())
+
