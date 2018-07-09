@@ -1,7 +1,8 @@
 # DAND-P1-Bikeshare
 Udacity Data Analyst Nano Degree's first project: Explore US Bikeshare Data.
 
-This is an interactive script that allows a user to filter Motivate's Bikeshare Data (ranging from January 2017 to June 2017).
+This is an interactive script that allows a user to filter Motivate's Bikeshare Trip Data.
+Currently, there is data for *Chicago, New York City, and Washington* (ranging from January 2017 to June 2017).
 Once filtered, the script will calculate the following statistics:
 
 #### Travel Time Stats
