@@ -28,4 +28,19 @@ class UserPrompter(object):
             except ValueError:
                 continue
 
+    def rerun(self):
+        while True:
+            try:
+                do_rerun = input('Would you like to rerun the program? (y/n)')
+                if do_rerun.lower() == 'y':
+                    return True
+                elif do_rerun.lower() == 'n':
+                    return False
+                else:
+                    raise ValueError
+            except ValueError as e:
+                print("Not a valid response. Please enter y or n.")
+                continue
+
+
 

@@ -9,6 +9,7 @@ class City(object):
         self.name = name
         self.csv_path = '../data/{}.csv'.format(self.name.replace(' ', '_'))
         self.df = None
+        self.current_filters = None
         if self.__has_data():
             self.df = self.__load_csv()
         else:
@@ -57,11 +58,21 @@ class City(object):
             raise
 
     def filter(self, month='all', day='all'):
+        '''
+        Filters data set based on the trip start time's month and day of week
+        :param month: string of numbers that represent the months being filtered
+        :param day: string of numbers that represent the days being filtered
+        :return: filtered dataframe.
+        '''
         parsed_month = self.__parse_filter_input(month, 1, 7)
         parsed_day = self.__parse_filter_input(day, 0, 7)
+        parsed_month_names = ', '.join([calendar.month_name[m] for m in parsed_month])
+        parsed_day_names = ', '.join([calendar.day_name[d] for d in parsed_day])
 
         self.filtered_df = self.df[(self.df['Start Day'].isin(parsed_day)) &
                                    (self.df['Start Time'].dt.month.isin(parsed_month))]
+        self.current_filters = "\nSelected Months: {} \nSelected Days: {}".format(parsed_month_names, parsed_day_names)
+        print(self.current_filters)
         return self.filtered_df
 
     def most_common_month(self):
@@ -74,13 +85,13 @@ class City(object):
         return self.filtered_df['Start Hour'].value_counts().idxmax()
 
     def get_user_type_counts(self):
-        return self.filtered_df['User Type'].value_counts().to_frame("User Type Counts")
+        return self.filtered_df['User Type'].value_counts().to_frame("")
 
     def get_gender_counts(self):
         try:
-            return self.filtered_df.fillna("Unknown")['Gender'].value_counts().to_frame("Gender Counts")
+            return self.filtered_df.fillna("Unknown")['Gender'].value_counts().to_frame("")
         except KeyError:
-            return "{} does not have gender data.".format(self.name.title())
+            return "\n{} does not have gender data.".format(self.name.title())
 
     def get_birth_year_stats(self):
         try:
@@ -107,13 +118,22 @@ class City(object):
         print("The average trip duration is: {0:0.2f} minutes".format(self.filtered_df['Trip Duration'].mean()/60))
 
     def show_user__stats(self):
-        print(self.get_user_type_counts())
-        print(self.get_gender_counts())
-        print(self.get_birth_year_stats())
+        print("A. TRIPS BY USER TYPE: {}".format(self.get_user_type_counts()))
+        print("B. TRIPS BY GENDER: {}".format(self.get_gender_counts()))
+        print("C. BIRTH YEAR STATS:\n{}".format(self.get_birth_year_stats()))
 
     def show_all_stats(self):
+        print("\n")
+        print("*"*8 + "Popular Times of Travel" + "*"*8)
         self.show_popular_travel_times()
+        print("\n")
+        print("*" * 8 + "Popular Stations and Trips" + "*" * 8)
         self.show_popular_stations()
+        print("\n")
+        print("*" * 8 + "Trip Duration Data" + "*" * 8)
         self.show_trip_duration_stats()
+        print("\n")
+        print("*" * 8 + "User Stats" + "*" * 8)
         self.show_user__stats()
+        print("\n")
 
