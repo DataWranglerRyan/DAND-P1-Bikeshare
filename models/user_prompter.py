@@ -42,5 +42,19 @@ class UserPrompter(object):
                 print("Not a valid response. Please enter y or n.")
                 continue
 
+    def show_raw_data(self):
+        while True:
+            try:
+                raw_data = input('Would you like to show the raw? (y/n)')
+                if raw_data.lower() == 'y':
+                    print(self.city.filtered_df.to_dict(orient='index'))
+                    break
+                elif raw_data.lower() == 'n':
+                    break
+                else:
+                    raise ValueError
+            except ValueError as e:
+                print("Not a valid response. Please enter y or n.")
+                continue
 
 
