@@ -20,5 +20,5 @@ Once filtered, the script will calculate the following statistics:
 * The Number of Trips by Gender
 * The Earliest, Most Recent, and Most Common Birth Years of the Users
 
-##Dependencies
+## Dependencies
 This script requires the pandas library.
