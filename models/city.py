@@ -7,7 +7,7 @@ from pathlib import Path
 class City(object):
     def __init__(self, name):
         self.name = name
-        self.csv_path = '../data/{}.csv'.format(self.name.replace(' ', '_'))
+        self.csv_path = '../data/{}.csv'.format(self.name.strip().replace(' ', '_'))
         self.df = None
         self.current_filters = None
         if self.__has_data():
